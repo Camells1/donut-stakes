@@ -1,0 +1,26 @@
+# Render Blueprint for Donut Stakes (Node web service, free plan).
+# Secrets are NOT stored here: Render asks for every "sync: false" value when you create the Blueprint.
+services:
+  - type: web
+    name: donut-stakes
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/config
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: BOT_SECRET          # shared with the bot mod (X-Bot-Secret header)
+        sync: false
+      - key: ADMIN_SECRET        # owner-only, for /admin and /api/admin
+        sync: false
+      - key: COOKIE_SECURE       # Render serves HTTPS, so mark the session cookie Secure
+        value: "1"
+      - key: TRUST_PROXY         # real client IPs behind Render's proxy (rate limits, referral checks)
+        value: "1"
+      - key: DATA_DIR            # where db.json and ledger.jsonl live; point at a persistent disk if you add one
+        value: ./data
+# Render sets PORT automatically; the server reads it.
+# Free plan: no persistent disk, so ./data is wiped on every deploy or restart. See README "Deploying".

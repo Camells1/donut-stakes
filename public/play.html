@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" data-site="{{SITE_NAME}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{GAME_NAME}} - {{SITE_NAME}}</title>
+<link rel="icon" href="/img/donut.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/games.css">
+</head>
+<body data-game="{{GAME_ID}}">
+<main>
+  <div id="verify-banner"></div>
+  <div class="game-head"><h1>{{GAME_NAME}}</h1><p class="muted">{{GAME_DESC}}</p></div>
+  <div class="game-layout">
+    <aside class="panel controls" id="controls"></aside>
+    <section class="panel stage" id="stage"></section>
+  </div>
+  <div id="history"></div>
+</main>
+<script src="/js/common.js"></script>
+<script src="/js/games/{{GAME_ID}}.js"></script>
+</body>
+</html>

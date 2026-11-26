@@ -1,0 +1,19 @@
+{
+  "name": "donut-stakes",
+  "version": "0.1.0",
+  "description": "Donut Stakes: in-game donut casino for a Minecraft server",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node scripts/smoke-test.js"
+  },
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^4.22.3"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}

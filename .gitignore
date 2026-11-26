@@ -1,0 +1,18 @@
+# dependencies
+node_modules/
+
+# secrets (BOT_SECRET, ADMIN_SECRET) - never commit
+.env
+.env.local
+
+# data: db.json, ledger.jsonl and test folders
+data/
+data-*/
+*.tmp
+
+# local tooling / logs
+.claude/
+npm-debug.log*
+
+# local npm settings (cache on drive D:)
+.npmrc
