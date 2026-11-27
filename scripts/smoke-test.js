@@ -123,7 +123,7 @@ function expiryCheck() {
       const r = await anon.req(p);
       ok(r.status === 200 && r.data.includes(SITE) && !r.data.includes('{{'), `page ${p} (${r.status})`);
     }
-    for (const p of ['/css/main.css', '/css/games.css', '/js/common.js', '/js/lobby.js', '/js/account.js', '/js/deposit.js', '/js/rewards.js', '/js/affiliates.js', '/img/donut.svg', ...gameIds.map((g) => `/js/games/${g}.js`)]) {
+    for (const p of ['/css/main.css', '/css/games.css', '/js/common.js', '/js/admin.js', '/js/lobby.js', '/js/account.js', '/js/deposit.js', '/js/rewards.js', '/js/affiliates.js', '/img/donut.svg', ...gameIds.map((g) => `/js/games/${g}.js`)]) {
       ok((await anon.req(p)).status === 200, `asset ${p}`);
     }
     ok((await anon.req('/play/nope')).status === 404, 'unknown game 404');

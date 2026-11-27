@@ -1,0 +1,109 @@
+/* Optional "Neon slots" theme. Cosmetic only: everything is scoped to
+   html[data-theme="flashy"], so the default minimal theme is untouched. */
+@property --dc-spin { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+
+html[data-theme="flashy"] {
+  --bg: #0b0613;
+  --bg2: #120a1f;
+  --panel: #160d26;
+  --panel2: #221338;
+  --line: #3a2160;
+  --line2: #5a2f8f;
+  --text: #fff6e6;
+  --muted: #cbb8ea;
+  --dim: #8d79b0;
+  --accent: #ff3fa4;
+  --accent-ink: #1a0012;
+  --gold: #ffd166;
+  --gold-deep: #c8902e;
+  --neon: #3ef0ff;
+}
+html[data-theme="flashy"] body {
+  background:
+    radial-gradient(1100px 520px at 50% -12%, #2c0f4e 0%, transparent 62%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .018) 0 2px, transparent 2px 90px),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+/* header + brand */
+html[data-theme="flashy"] .site-header { background: rgba(11, 6, 19, .92); border-bottom: 1px solid var(--line2); box-shadow: 0 1px 0 rgba(255, 63, 164, .45), 0 8px 26px rgba(255, 63, 164, .12); }
+html[data-theme="flashy"] .brand span { color: var(--gold); text-transform: uppercase; letter-spacing: .06em; text-shadow: 0 0 10px rgba(255, 209, 102, .55); }
+html[data-theme="flashy"] .nav a.active, html[data-theme="flashy"] .games-menu > button.active { background: rgba(255, 63, 164, .14); color: #fff; box-shadow: inset 0 0 0 1px rgba(255, 63, 164, .5); }
+html[data-theme="flashy"] .balance-pill { border-color: var(--gold); color: var(--gold); box-shadow: inset 0 0 10px rgba(255, 209, 102, .18), 0 0 12px rgba(255, 209, 102, .22); }
+html[data-theme="flashy"] h1, html[data-theme="flashy"] h2 { color: var(--gold); text-shadow: 0 0 14px rgba(255, 209, 102, .25); }
+
+/* neon-edged cards */
+html[data-theme="flashy"] .panel, html[data-theme="flashy"] .game-card, html[data-theme="flashy"] .bot-card, html[data-theme="flashy"] .notice {
+  border-color: var(--line2);
+  box-shadow: 0 0 0 1px rgba(62, 240, 255, .07), 0 0 18px rgba(255, 63, 164, .12);
+}
+html[data-theme="flashy"] .game-card:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 22px rgba(255, 63, 164, .35); }
+html[data-theme="flashy"] .game-card h3 { color: #fff; }
+
+/* buttons: gold primary with a neon rim */
+html[data-theme="flashy"] .btn.primary, html[data-theme="flashy"] .btn.success {
+  background: linear-gradient(180deg, #ffe29a, var(--gold) 45%, var(--gold-deep));
+  border-color: #ffe9b3; color: #2a1600; text-shadow: 0 1px 0 rgba(255, 255, 255, .4);
+  box-shadow: 0 0 0 1px rgba(255, 63, 164, .5), 0 0 18px rgba(255, 209, 102, .35);
+}
+html[data-theme="flashy"] .btn { border-color: var(--line2); }
+html[data-theme="flashy"] .seg button.on { background: rgba(255, 63, 164, .18); color: #fff; box-shadow: inset 0 0 0 1px rgba(255, 63, 164, .55); }
+
+/* reel-style frame around the game stage: gold bezel, dark inner ring, reel shading */
+html[data-theme="flashy"] .stage {
+  border: 3px solid transparent;
+  background: linear-gradient(var(--panel), var(--panel)) padding-box, linear-gradient(180deg, #ffe7a8, var(--gold-deep) 50%, #ffe7a8) border-box;
+  box-shadow: 0 0 0 4px #1a0d2e, 0 0 0 5px rgba(255, 209, 102, .45), 0 0 34px rgba(255, 63, 164, .25);
+}
+html[data-theme="flashy"] .stage::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 3;
+  background: linear-gradient(180deg, rgba(0, 0, 0, .42), transparent 13%, transparent 87%, rgba(0, 0, 0, .42));
+}
+/* marquee bulbs along the top of the frame */
+html[data-theme="flashy"] .stage::after {
+  content: ""; position: absolute; left: 10px; right: 10px; top: 5px; height: 8px; pointer-events: none; z-index: 4;
+  background: radial-gradient(circle, var(--gold) 2px, transparent 3px) 0 0 / 16px 8px repeat-x;
+  animation: dc-bulbs 1.2s steps(2) infinite;
+  opacity: .85;
+}
+@keyframes dc-bulbs { to { background-position: 8px 0; } }
+
+/* animated light border around the controls */
+html[data-theme="flashy"] .controls { border-color: transparent; }
+html[data-theme="flashy"] .controls::before {
+  content: ""; position: absolute; inset: -1px; border-radius: 11px; padding: 2px; pointer-events: none;
+  background: conic-gradient(from var(--dc-spin), var(--accent), var(--gold), var(--neon), var(--accent));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: dc-spin 5s linear infinite;
+}
+@keyframes dc-spin { to { --dc-spin: 360deg; } }
+@media (max-width: 960px) { html[data-theme="flashy"] .controls { position: relative; } }
+
+/* spin-style transitions: page content rolls in like a reel; the stage blurs briefly while a round is requested */
+html[data-theme="flashy"] main.dc-reel-in { animation: dc-reel-in .45s cubic-bezier(.2, .9, .25, 1.15) both; }
+@keyframes dc-reel-in { from { transform: translateY(-28px); filter: blur(6px); opacity: 0; } }
+html[data-theme="flashy"] .stage.dc-spinning .stage-inner { animation: dc-reel-spin .32s ease-out; }
+@keyframes dc-reel-spin { 40% { transform: translateY(10px); filter: blur(3px); } }
+
+/* game pieces */
+html[data-theme="flashy"] .result-pop { border-color: var(--gold); box-shadow: 0 0 30px rgba(255, 209, 102, .35); background: rgba(22, 13, 38, .95); }
+html[data-theme="flashy"] .result-pop b { color: var(--gold); }
+html[data-theme="flashy"] .result-pop.lose { border-color: var(--line2); box-shadow: none; }
+html[data-theme="flashy"] .result-pop.lose b { color: var(--muted); }
+html[data-theme="flashy"] .tile, html[data-theme="flashy"] .ttile, html[data-theme="flashy"] .kcell { border-color: var(--line2); }
+html[data-theme="flashy"] .slot-machine { border-color: var(--gold); box-shadow: 0 0 0 3px #1a0d2e, 0 0 0 4px rgba(255, 209, 102, .5); }
+html[data-theme="flashy"] .reel { border-color: var(--line2); }
+html[data-theme="flashy"] .roul-board .chip, html[data-theme="flashy"] .bac-spot .chip { background: var(--gold); color: #2a1600; }
+
+/* theme + sound switch in the footer */
+.theme-switch { display: inline-flex; align-items: center; gap: 8px; }
+.theme-switch .seg { padding: 1px; }
+.theme-switch .seg button { padding: 3px 8px; font-size: 12px; }
+
+/* respect reduced motion: no looping lights or reel effects */
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="flashy"] .stage::after, html[data-theme="flashy"] .controls::before,
+  html[data-theme="flashy"] main.dc-reel-in, html[data-theme="flashy"] .stage.dc-spinning .stage-inner { animation: none !important; }
+}
