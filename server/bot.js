@@ -116,16 +116,41 @@ r.post('/withdrawals/:id/claim', (req, res) => {
   res.json({ ok: true, withdrawal: w });
 });
 
+// complete/fail also accept 'review', so the owner can resolve one by hand.
+const OPEN = new Set(['pending', 'processing', 'review']);
+const reasonOf = (req, dflt) => String((req.body && req.body.reason) || dflt).slice(0, 200);
+
 r.post('/withdrawals/:id/complete', (req, res) => {
   const w = wd(req.params.id);
+  if (!OPEN.has(w.status)) throw new AppError(`Withdrawal is ${w.status}`, 'bad_state', 409);
+  w.status = 'completed'; w.completedAt = Date.now(); w.ref = (req.body && req.body.ref) || null; w.waitingForFunds = false; store.save();
+  res.json({ ok: true, withdrawal: w });
+});
+
+// The bot does not have enough donuts yet. Nothing was paid: the request goes back to
+// 'pending' (still held from the player's balance, still cancellable by the player), the
+// player sees "waiting for bot funds", and the bot claims it again later.
+r.post('/withdrawals/:id/hold', (req, res) => {
+  const w = wd(req.params.id);
   if (w.status !== 'processing' && w.status !== 'pending') throw new AppError(`Withdrawal is ${w.status}`, 'bad_state', 409);
-  w.status = 'completed'; w.completedAt = Date.now(); w.ref = (req.body && req.body.ref) || null; store.save();
+  w.status = 'pending'; w.waitingForFunds = true; w.waitingSince = w.waitingSince || Date.now(); w.holdCount = (w.holdCount || 0) + 1;
+  w.reason = reasonOf(req, 'waiting for bot funds'); store.save();
+  res.json({ ok: true, withdrawal: w });
+});
+
+// The payout outcome is unknown (for example the bot restarted mid-payout). Funds stay held,
+// it is never paid or refunded automatically; the owner completes or fails it.
+r.post('/withdrawals/:id/review', (req, res) => {
+  const w = wd(req.params.id);
+  if (w.status !== 'processing' && w.status !== 'pending') throw new AppError(`Withdrawal is ${w.status}`, 'bad_state', 409);
+  w.status = 'review'; w.reviewAt = Date.now(); w.waitingForFunds = false; w.reason = reasonOf(req, 'needs owner review'); store.save();
   res.json({ ok: true, withdrawal: w });
 });
 
 r.post('/withdrawals/:id/fail', (req, res) => {
   const w = wd(req.params.id);
-  if (w.status !== 'processing' && w.status !== 'pending') throw new AppError(`Withdrawal is ${w.status}`, 'bad_state', 409);
+  if (!OPEN.has(w.status)) throw new AppError(`Withdrawal is ${w.status}`, 'bad_state', 409);
+  w.waitingForFunds = false;
   applyTx(w.userId, w.amount, 'withdraw_refund', { withdrawalId: w.id, reason: (req.body && req.body.reason) || 'bot failed' });
   w.status = 'failed'; w.failedAt = Date.now(); w.reason = (req.body && req.body.reason) || null; store.save();
   res.json({ ok: true, withdrawal: w });

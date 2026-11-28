@@ -277,6 +277,60 @@ function expiryCheck() {
     r = await a.req('/api/account/withdraw', { amount: 50 });
     await bot(`/withdrawals/${r.data.withdrawal.id}/fail`, { reason: 'offline' });
     ok((await bal(a)) === b - 200, 'failed withdrawal refunded');
+
+    // ---- automatic payout flow (what the mod does), fake players and amounts only ----
+    const wdReq = async (amount) => (await a.req('/api/account/withdraw', { amount })).data.withdrawal.id;
+    const pendingIds = async () => (await bot('/withdrawals?status=pending')).data.withdrawals.map((w) => w.id);
+    const w1 = await wdReq(30);
+    ok((await pendingIds()).includes(w1), 'auto: pending request listed');
+    ok((await bot(`/withdrawals/${w1}/claim`, {})).status === 200, 'auto: first claim succeeds');
+    ok((await bot(`/withdrawals/${w1}/claim`, {})).status === 409, 'auto: duplicate claim ignored (never paid twice)');
+    ok(!(await pendingIds()).includes(w1), 'auto: claimed request leaves the pending list');
+    ok((await bot(`/withdrawals/${w1}/complete`, { ref: `wd:${w1}` })).data.withdrawal.status === 'completed', 'auto: paid request completed');
+    ok((await bot(`/withdrawals/${w1}/complete`, {})).status === 409, 'auto: completed request cannot be completed again');
+    ok((await bot(`/withdrawals/${w1}/fail`, {})).status === 409, 'auto: completed request cannot be refunded');
+    // full amount, no cap: a large request is offered to the bot as-is
+    const b1 = await bal(a);
+    const wBig = await wdReq(b1);
+    ok((await bot('/withdrawals?status=pending')).data.withdrawals.some((w) => w.id === wBig && w.amount === b1), 'auto: full amount offered, no cap');
+    await a.req(`/api/account/withdrawals/${wBig}/cancel`, {});
+    ok((await bal(a)) === b1, 'auto: cancel returns the full amount');
+
+    // insufficient bot funds: back to pending, flagged, retried, deposits keep working meanwhile
+    const b2 = await bal(a);
+    const w2 = await wdReq(40);
+    await bot(`/withdrawals/${w2}/claim`, {});
+    r = await bot(`/withdrawals/${w2}/hold`, { reason: 'waiting for bot funds' });
+    ok(r.status === 200 && r.data.withdrawal.status === 'pending' && r.data.withdrawal.waitingForFunds === true, 'auto: insufficient funds keeps the request pending');
+    ok((await bal(a)) === b2 - 40, 'auto: waiting request keeps the funds held (no refund)');
+    ok((await pendingIds()).includes(w2), 'auto: waiting request offered again for retry');
+    ok((await a.req('/api/account/withdrawals')).data.withdrawals.some((w) => w.id === w2 && w.waitingForFunds), 'auto: player sees waiting for bot funds');
+    const dep = await fund(a, 100);
+    ok((await bal(a)) === b2 - 40 + dep, 'auto: deposit credited while a withdrawal waits for funds');
+    ok((await bot(`/withdrawals/${w2}/claim`, {})).status === 200, 'auto: retry claims the waiting request');
+    await bot(`/withdrawals/${w2}/hold`, {});
+    ok((await bot(`/withdrawals/${w2}/claim`, {})).status === 200, 'auto: second retry claims again');
+    r = await bot(`/withdrawals/${w2}/complete`, { ref: `wd:${w2}` });
+    ok(r.data.withdrawal.status === 'completed' && r.data.withdrawal.waitingForFunds === false && r.data.withdrawal.amount === 40, 'auto: paid in full once funds arrive');
+    ok((await bal(a)) === b2 - 40 + dep, 'auto: completing does not change the balance again');
+    ok((await bot(`/withdrawals/${w2}/claim`, {})).status === 409, 'auto: completed request never claimed again');
+
+    // unknown outcome: owner review, not offered, resolvable by hand
+    const w4 = await wdReq(15);
+    await bot(`/withdrawals/${w4}/claim`, {});
+    r = await bot(`/withdrawals/${w4}/review`, { reason: 'bot restarted mid-payout' });
+    ok(r.data.withdrawal.status === 'review' && !(await pendingIds()).includes(w4), 'auto: unknown outcome goes to owner review');
+    ok((await bot(`/withdrawals/${w4}/fail`, { reason: 'owner refunded' })).data.withdrawal.status === 'failed', 'auto: owner can refund a reviewed request');
+    const b3 = await bal(a);
+    const w3 = await wdReq(25);
+    await bot(`/withdrawals/${w3}/claim`, {});
+    r = await bot(`/withdrawals/${w3}/fail`, { reason: 'no confirmation within 30 s' });
+    ok(r.data.withdrawal.status === 'failed' && (await bal(a)) === b3, 'auto: failed pay marked failed and refunded');
+    ok((await bot(`/withdrawals/${w3}/fail`, {})).status === 409 && (await bal(a)) === b3, 'auto: double fail does not refund twice');
+    for (const p of ['/withdrawals', `/withdrawals/${w3}/claim`, `/withdrawals/${w3}/complete`, `/withdrawals/${w3}/fail`, `/withdrawals/${w3}/hold`, `/withdrawals/${w3}/review`]) {
+      const res = await anon.req('/api/bot' + p, p === '/withdrawals' ? undefined : {}, { 'X-Bot-Secret': 'wrong-fake-secret' });
+      ok(res.status === 401 && res.data.code === 'bad_secret', `auto: bad secret gets 401 on ${p}`);
+    }
     ok((await a.req('/api/account/withdraw', { amount: -5 })).status === 400, 'tamper: negative withdrawal rejected');
     ok((await a.req('/api/games/coinflip/play', { bet: 1, side: 'heads' }, { Origin: 'https://evil.example' })).status === 403, 'cross-origin POST blocked');
 

@@ -105,7 +105,7 @@
         <td class="r ${x.delta > 0 ? 'win' : 'loss'}">${x.delta > 0 ? '+' : ''}${DC.fmt(x.delta)}</td><td class="r">${DC.fmt(x.balanceAfter)}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">No transactions yet.</td></tr>';
       const list = document.getElementById('wd-list');
       list.innerHTML = w.withdrawals.length ? `<table class="data" style="margin-top:12px"><tbody>${w.withdrawals.slice(0, 6).map((x) => `<tr><td>#${x.id}</td><td class="r">${DC.fmt(x.amount)}</td>
-        <td><span class="badge ${x.status === 'completed' ? 'ok' : x.status === 'pending' || x.status === 'processing' ? 'warn' : ''}">${x.status}</span></td>
+        <td><span class="badge ${x.status === 'completed' ? 'ok' : ['pending', 'processing', 'review'].includes(x.status) ? 'warn' : ''}">${x.status === 'pending' && x.waitingForFunds ? 'waiting for bot funds' : x.status === 'review' ? 'being checked' : x.status}</span></td>
         <td class="r">${x.status === 'pending' ? `<button class="btn small ghost" data-cancel="${x.id}">Cancel</button>` : DC.ago(x.createdAt)}</td></tr>`).join('')}</tbody></table>` : '';
       list.querySelectorAll('[data-cancel]').forEach((b) => (b.onclick = async () => {
         try { const r = await DC.api(`/api/account/withdrawals/${b.dataset.cancel}/cancel`, {}); DC.setBalance(r.balance); await DC.refreshMe(); render(); } catch (ex) { DC.handleError(ex); }
