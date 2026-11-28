@@ -22,7 +22,7 @@
       <circle cx="50" cy="50" r="32" fill="none" stroke="${opts.flavor === 'burnt' ? '#3a302b' : '#c4925e'}" stroke-width="26"/>
       <circle cx="50" cy="50" r="31" fill="none" stroke="${f}" stroke-width="18"/></svg>`;
   };
-  DC.icon = () => DC.donut({ flavor: 'pink' });
+  DC.icon = () => `<img class="site-logo" src="/img/logos/donut-stakes.svg" alt="" width="34" height="34">`;
 
   // Playing card: c = { r: 1-13, s: 0-3 } or null for a face-down card.
   const RANKS = ['', 'A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
@@ -175,7 +175,7 @@
 
   // "/pay BOT AMOUNT" chip with copy buttons. Amounts always come from the server.
   DC.payCmd = (bot, amount) => `<span class="pay-cmd"><span class="cmd">/pay ${DC.esc(bot)} ${DC.esc(amount)}</span>
-    <button class="btn small" data-copy-text="${DC.esc(amount)}" title="Copy amount">Copy amount</button><button class="btn small ghost" data-copy-text="/pay ${DC.esc(bot)} ${DC.esc(amount)}" title="Copy command">Copy command</button></span>`;
+    <button class="btn small ghost" data-copy-text="/pay ${DC.esc(bot)} ${DC.esc(amount)}" title="Copy command">Copy command</button></span>`;
 
   // ---------- age gate ----------
   function ageGate() {
@@ -367,4 +367,8 @@
     return DC;
   })();
   DC.refreshMe = async () => { const me = await DC.api('/api/me'); DC.me = me.user; renderHeadRight(); verifyBanner(); DC._meCbs.forEach((cb) => cb(DC.me)); return DC.me; };
+  // Theme (neon slots / minimal) loads on every page; it waits for DC.ready itself.
+  const themeTag = document.createElement('script');
+  themeTag.src = '/js/theme.js';
+  document.body.appendChild(themeTag);
 })();

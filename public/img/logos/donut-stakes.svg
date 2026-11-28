@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="g-donut-stakes" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="100" y2="100"><stop offset="0" stop-color="#ff3fa4"/><stop offset="1" stop-color="#ffd166"/></linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="30" fill="none" stroke="#120a1f" stroke-opacity=".35" stroke-width="18"/><circle cx="60" cy="60" r="30" fill="none" stroke="url(#g-donut-stakes)" stroke-width="18" stroke-dasharray="2 0"/><rect x="37.5" y="43.5" width="5" height="5" rx="1" fill="#ffd166" transform="rotate(0 40 46)"/><rect x="59.5" y="33.5" width="5" height="5" rx="1" fill="#3ef0ff" transform="rotate(30 62 36)"/><rect x="71.5" y="63.5" width="5" height="5" rx="1" fill="#ffd166" transform="rotate(60 74 66)"/><rect x="45.5" y="71.5" width="5" height="5" rx="1" fill="#ff3fa4" transform="rotate(90 48 74)"/><rect x="81.5" y="45.5" width="5" height="5" rx="1" fill="#3ef0ff" transform="rotate(120 84 48)"/><path d="M94 22 L96 28 L102 30 L96 32 L94 38 L92 32 L86 30 L92 28 Z" fill="#ffd166"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="g-slider" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="100" y2="100"><stop offset="0" stop-color="#3ef0ff"/><stop offset="1" stop-color="#ffd166"/></linearGradient>
+  </defs>
+  <rect x="28" y="56" width="64" height="8" rx="4" fill="url(#g-slider)" opacity=".45"/><rect x="58" y="52" width="16" height="16" rx="4" fill="#ffd166"/><path d="M66 36 L66 48" stroke="url(#g-slider)" stroke-width="4" stroke-linecap="round"/><circle cx="66" cy="34" r="5" fill="url(#g-slider)"/>
+</svg>

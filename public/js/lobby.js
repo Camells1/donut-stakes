@@ -3,7 +3,7 @@
 
   // A plain grid: game name and one short line each.
   document.getElementById('games-grid').innerHTML = DC.games.map((g) =>
-    `<a class="game-card" href="/play/${g.id}"><h3>${DC.esc(g.name)}</h3><p>${DC.esc(g.description)}</p></a>`).join('');
+    `<a class="game-card" href="/play/${g.id}"><img class="game-logo" src="/img/logos/${encodeURIComponent(g.id)}.svg" alt="" width="56" height="56"><h3>${DC.esc(g.name)}</h3><p>${DC.esc(g.description)}</p></a>`).join('');
 
   const cta = document.getElementById('hero-cta');
   if (DC.me) cta.innerHTML = DC.me.verified ? '<a class="btn" href="/deposit">Deposit</a>' : '<a class="btn primary" href="/account">Verify your account</a>';

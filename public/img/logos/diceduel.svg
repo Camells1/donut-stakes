@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="g-diceduel" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="100" y2="100"><stop offset="0" stop-color="#ff6ad5"/><stop offset="1" stop-color="#6a5cff"/></linearGradient>
+  </defs>
+  <rect x="24" y="44" width="34" height="34" rx="8" fill="url(#g-diceduel)" stroke="#120a1f" stroke-width="2.5"/><circle cx="35" cy="55" r="3.4" fill="#120a1f"/><circle cx="47" cy="67" r="3.4" fill="#120a1f"/><circle cx="47" cy="55" r="3.4" fill="#120a1f"/><rect x="62" y="36" width="34" height="34" rx="8" fill="url(#g-diceduel)" stroke="#120a1f" stroke-width="2.5"/><circle cx="72" cy="46" r="3.4" fill="#120a1f"/><circle cx="86" cy="60" r="3.4" fill="#120a1f"/><circle cx="86" cy="46" r="3.4" fill="#120a1f"/><circle cx="72" cy="60" r="3.4" fill="#120a1f"/>
+</svg>

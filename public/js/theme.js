@@ -8,7 +8,15 @@
   const DC = await window.DC.ready;
   const store = DC.store;
   const root = document.documentElement;
-  const theme = () => root.dataset.theme || 'minimal';
+  // The loud theme is the default now. Players who picked Minimal keep it (stored choice).
+  const theme = () => (store.get('dc_theme') === 'minimal' ? 'minimal' : 'flashy');
+  for (const href of ['/css/flashy.css', '/css/slop.css']) {
+    if (document.querySelector(`link[href="${href}"]`)) continue;
+    const l = document.createElement('link');
+    l.rel = 'stylesheet'; l.href = href;
+    document.head.appendChild(l);
+  }
+  root.dataset.theme = theme();
 
   // ---------- sounds (WebAudio, synthesized; nothing downloaded) ----------
   let actx = null;

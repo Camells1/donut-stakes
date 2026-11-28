@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="g-towers" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="100" y2="100"><stop offset="0" stop-color="#b56cff"/><stop offset="1" stop-color="#3ef0ff"/></linearGradient>
+  </defs>
+  <rect x="44" y="72" width="32" height="12" rx="3" fill="url(#g-towers)"/><rect x="48" y="58" width="24" height="12" rx="3" fill="url(#g-towers)" opacity=".85"/><rect x="52" y="44" width="16" height="12" rx="3" fill="url(#g-towers)" opacity=".7"/><path d="M60 26 L66 36 L54 36 Z" fill="#ffd166"/>
+</svg>

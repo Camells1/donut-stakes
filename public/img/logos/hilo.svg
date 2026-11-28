@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="g-hilo" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="100" y2="100"><stop offset="0" stop-color="#5ef2ff"/><stop offset="1" stop-color="#7b5cff"/></linearGradient>
+  </defs>
+  <path d="M46 62 L60 46 L74 62" fill="none" stroke="url(#g-hilo)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M46 78 L60 62 L74 78" fill="none" stroke="url(#g-hilo)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/>
+</svg>

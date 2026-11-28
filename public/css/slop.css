@@ -1,0 +1,67 @@
+/* "Super slop" layer for the flashy theme: loud gradients, rainbow borders, wobble
+   and glow. Cosmetic only, scoped to html[data-theme="flashy"]. The minimal theme
+   never loads these rules. */
+@property --slop-hue { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+
+@keyframes slop-hue { to { --slop-hue: 360deg; } }
+@keyframes slop-rainbow { to { background-position: 300% 50%; } }
+@keyframes slop-wobble { 0%, 100% { transform: rotate(-0.6deg); } 50% { transform: rotate(0.6deg); } }
+@keyframes slop-pulse { 0%, 100% { box-shadow: 0 0 12px rgba(255, 63, 164, .5), 0 0 30px rgba(62, 240, 255, .25); }
+                        50% { box-shadow: 0 0 26px rgba(255, 209, 102, .7), 0 0 60px rgba(255, 63, 164, .45); } }
+@keyframes slop-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes slop-glitch { 0%, 92%, 100% { text-shadow: 0 0 0 transparent; }
+                         93% { text-shadow: 3px 0 #3ef0ff, -3px 0 #ff3fa4; }
+                         95% { text-shadow: -2px 0 #3ef0ff, 2px 0 #ff3fa4; } }
+
+/* rainbow text for headings and brand */
+html[data-theme="flashy"] h1,
+html[data-theme="flashy"] .brand span {
+  background: linear-gradient(90deg, #ff3fa4, #ffd166, #3ef0ff, #b56cff, #ff3fa4);
+  background-size: 300% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: slop-rainbow 6s linear infinite, slop-glitch 7s steps(1) infinite;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+
+/* panels: animated rainbow border and a pulsing glow */
+html[data-theme="flashy"] .panel {
+  position: relative; border: 2px solid transparent;
+  background: linear-gradient(var(--panel), var(--panel)) padding-box,
+              linear-gradient(90deg, #ff3fa4, #ffd166, #3ef0ff, #b56cff, #ff3fa4) border-box;
+  background-size: auto, 300% 100%;
+  animation: slop-rainbow 9s linear infinite, slop-pulse 4s ease-in-out infinite;
+}
+
+/* buttons wobble and bounce on hover */
+html[data-theme="flashy"] .btn { text-transform: uppercase; letter-spacing: .05em; font-weight: 800; transition: transform .12s ease; }
+html[data-theme="flashy"] .btn:hover:not(:disabled) { transform: scale(1.06) rotate(-1.5deg); animation: slop-wobble .4s ease-in-out infinite; }
+html[data-theme="flashy"] .btn.primary {
+  background: linear-gradient(90deg, #ff3fa4, #ffd166, #ff3fa4); background-size: 200% 100%;
+  animation: slop-rainbow 2.5s linear infinite; color: #1a0012; border: 0;
+}
+
+/* a scrolling ticker strip under the header */
+html[data-theme="flashy"] body::before {
+  content: "DONUT STAKES  *  NO REAL MONEY  *  18+  *  GAMBLE RESPONSIBLY  *  DONUT STAKES  *  NO REAL MONEY  *  18+  *  GAMBLE RESPONSIBLY  *  ";
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; height: 22px; line-height: 22px;
+  background: linear-gradient(90deg, #ff3fa4, #b56cff, #3ef0ff); color: #1a0012;
+  font: 800 11px/22px system-ui, sans-serif; letter-spacing: .12em; white-space: nowrap; overflow: hidden;
+  pointer-events: none;
+}
+html[data-theme="flashy"] main { padding-bottom: 30px; }
+
+/* tile hover: lift and tilt, like a slot machine reel stop */
+html[data-theme="flashy"] .game-card:hover, html[data-theme="flashy"] .game-tile:hover {
+  transform: translateY(-4px) rotate(-1deg) scale(1.02);
+  box-shadow: 0 0 0 2px #ffd166, 0 0 26px rgba(255, 209, 102, .55);
+}
+
+/* hype text */
+html[data-theme="flashy"] .muted, html[data-theme="flashy"] p { text-shadow: 0 0 8px rgba(255, 63, 164, .18); }
+html[data-theme="flashy"] .balance-pill { animation: slop-pulse 2.4s ease-in-out infinite; }
+
+/* logos: game badges and the site mark */
+.game-logo, .site-logo { display: block; filter: drop-shadow(0 3px 8px rgba(255, 63, 164, .35)); }
+html[data-theme="flashy"] .game-card { display: grid; grid-template-columns: 56px 1fr; gap: 6px 14px; align-items: center; }
+html[data-theme="flashy"] .game-card h3, html[data-theme="flashy"] .game-card p { grid-column: 2; margin: 0; }
+html[data-theme="flashy"] .game-card .game-logo { grid-row: span 2; width: 56px; height: 56px; }

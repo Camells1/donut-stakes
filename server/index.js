@@ -108,6 +108,7 @@ app.post('/api/affiliates/apply', (req, res) => res.json({ ok: true, ...rewards.
 // Owner-only (ADMIN_SECRET)
 // Bot status: public read, owner write.
 app.get('/api/public/bot', (req, res) => res.json({ ok: true, ...botstatus.publicView() }));
+app.get('/api/leaderboard', (req, res) => res.json({ ok: true, rows: require('./leaderboard').top(req.query.limit) }));
 admin.router.get('/bot', (req, res) => res.json({ ok: true, ...botstatus.publicView() }));
 admin.router.post('/bot', (req, res) => res.json({ ok: true, ...botstatus.update(req.body) }));
 app.use('/api/admin', admin.router);
@@ -225,6 +226,7 @@ app.get('/admin', page('admin.html'));
 app.get('/deposit', page('deposit.html'));
 app.get('/rewards', page('rewards.html'));
 app.get('/affiliates', page('affiliates.html'));
+app.get('/leaderboard', page('leaderboard.html'));
 app.get('/terms', page('terms.html'));
 app.get('/privacy', page('privacy.html'));
 app.get('/responsible', page('responsible.html'));

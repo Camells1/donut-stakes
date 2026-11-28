@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="g-casebattle" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="100" y2="100"><stop offset="0" stop-color="#ff3fa4"/><stop offset="1" stop-color="#3ef0ff"/></linearGradient>
+  </defs>
+  <path d="M36 36 L84 84 M84 36 L36 84" stroke="url(#g-casebattle)" stroke-width="6" stroke-linecap="round"/><circle cx="36" cy="36" r="5" fill="url(#g-casebattle)"/><circle cx="84" cy="36" r="5" fill="url(#g-casebattle)"/><circle cx="60" cy="60" r="8" fill="#120a1f" opacity=".5"/>
+</svg>

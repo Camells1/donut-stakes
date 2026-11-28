@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="g-coinflip" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="100" y2="100"><stop offset="0" stop-color="#ffd166"/><stop offset="1" stop-color="#ff8a00"/></linearGradient>
+  </defs>
+  <ellipse cx="60" cy="60" rx="22" ry="30" fill="url(#g-coinflip)" stroke="#120a1f" stroke-width="3"/><ellipse cx="60" cy="60" rx="14" ry="22" fill="none" stroke="#120a1f" stroke-opacity=".4" stroke-width="2.5"/><path d="M60 46 L63.5 56 L74 56 L65.5 62 L68.5 72 L60 66 L51.5 72 L54.5 62 L46 56 L56.5 56 Z" fill="#120a1f" opacity=".7"/>
+</svg>
